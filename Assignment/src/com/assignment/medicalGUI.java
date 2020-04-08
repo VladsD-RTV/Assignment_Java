@@ -35,6 +35,8 @@ public class medicalGUI extends JFrame implements ActionListener, MouseListener
 	JPanel centrePanel,southPanel,northPanel,menuPanel,menuPanel1,menuPanel2,menuPanel3,menuPanel4;
 	BufferedImage myCovid19Pic;
 	JComboBox<String> cb,cb1,cb2,cb3,cb4;
+	int count = 0;
+	
 	
 	public medicalGUI(String someTitle)
 	{
@@ -103,11 +105,11 @@ public class medicalGUI extends JFrame implements ActionListener, MouseListener
 		String[] Temp = {" ","hot", "normal","cool"};
 		String[] choices = {" ","Yes","No"};
 		//Using the JComboBox to allow for choices for all my options.
-		final JComboBox<String> cb = new JComboBox<String>(Temp);
-		final JComboBox<String> cb1 = new JComboBox<String>(choices);
-		final JComboBox<String> cb2 = new JComboBox<String>(choices);
-		final JComboBox<String> cb3 = new JComboBox<String>(choices);
-		final JComboBox<String> cb4 = new JComboBox<String>(choices);
+		JComboBox<String> cb = new JComboBox<String>(Temp);
+		JComboBox<String> cb1 = new JComboBox<String>(choices);
+		JComboBox<String> cb2 = new JComboBox<String>(choices);
+		JComboBox<String> cb3 = new JComboBox<String>(choices);
+		JComboBox<String> cb4 = new JComboBox<String>(choices);
 		
 		//adding the Jcombobox menu string to the menus
 		menuPanel.add(cb);
@@ -168,12 +170,27 @@ public class medicalGUI extends JFrame implements ActionListener, MouseListener
 		
 	}//end MedicalGUI()
 	
+	public void clearAll(int count)
+	{
+		if(count == 1)
+		{
+			System.out.println("works");
+			cb.setSelectedIndex(0);
+		}
+		
+	}
+	
 	public void actionPerformed(ActionEvent someEvent)
 	{
 		//if user uses the rest button
 		if(someEvent.getSource() == reset) 
 		{
 			JOptionPane.showMessageDialog(this, "The interface has been reset");
+			count = 1;
+			System.out.print(count);
+			
+			clearAll(count);
+				
 			
 		}//end if
 		

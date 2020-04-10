@@ -4,7 +4,7 @@
  * 	Compiler Used: eclipse
  * 	Start Date: 
 */
-package com.assignment;
+package com.assignment.copy;
 //imports from java
 
 import java.awt.event.ActionEvent;
@@ -26,17 +26,30 @@ import javax.swing.JPanel;
 import javax.swing.JComboBox;
 import java.util.*;
 import java.awt.event.*;
+import java.io.*;
+import com.assignment.nativeBayes;
+import com.assignment.nativeBayesConfig;
 
 public class medicalGUI extends JFrame implements ActionListener, MouseListener
 {
-	
+	//j prefix
 	JButton reset, calculate;  
 	JLabel titleLabel,menuSet,menuSet1,menuSet2,menuSet3,menuSet4;
 	JPanel centrePanel,southPanel,northPanel,menuPanel,menuPanel1,menuPanel2,menuPanel3,menuPanel4;
 	BufferedImage myCovid19Pic;
-	JComboBox<String> cb,cb1,cb2,cb3,cb4;
-	int count = 0;
-	
+	JTextArea cb,cb1,cb2,cb3,cb4;
+	//Variables used
+	int count 			= 0;
+	int check 			= 0;
+	int check1 			= 0;
+	int check2 			= 0;
+	int check3 			= 0;
+	int check4 			= 0;
+	String temp 		= "";
+	String aches		= "";
+	String cough 		= "";
+	String soreThroat 	= "";
+	String RTDZ 		= "";
 	
 	public medicalGUI(String someTitle)
 	{
@@ -77,39 +90,36 @@ public class medicalGUI extends JFrame implements ActionListener, MouseListener
 			e.printStackTrace();
 		}//end catch
 		
-		menuSet = new JLabel("What kind of temperture does the patient have? ");
+		menuSet = new JLabel("What kind of temperture does the patient have? (Answer(1=hot,2=normal,3=cool))");
 		menuSet.setVisible(true);
 		menuPanel.add(menuSet);
 		
 		//Aches panel/set
-		menuSet1 = new JLabel("Do you have any Aches? ");
+		menuSet1 = new JLabel("Do you have any Aches? (Answer(1=yes or 2=no))");
 		menuSet1.setVisible(true);
 		menuPanel1.add(menuSet1);
 		
 		//cough panel/set
-		menuSet2 = new JLabel("Do you have a Cough? ");
+		menuSet2 = new JLabel("Do you have a Cough? (Answer(1=yes or 2=no))");
 		menuSet2.setVisible(true);
 		menuPanel2.add(menuSet2);
 		
 		//Sore throat panel/set
-		menuSet3 = new JLabel("Do you have a Sore throat? ");
+		menuSet3 = new JLabel("Do you have a Sore throat? (Answer(1=yes or 2=no))");
 		menuSet3.setVisible(true);
 		menuPanel3.add(menuSet3);
 		
 		//Danger Zone panel/set
-		menuSet4 = new JLabel("Have you recently been in a danger zone? ");
+		menuSet4 = new JLabel("Have you recently been in a danger zone? (Answer(1=yes or 2=no))");
 		menuSet4.setVisible(true);
 		menuPanel4.add(menuSet4);
 		
-		//adding the options string typing
-		String[] Temp = {" ","hot", "normal","cool"};
-		String[] choices = {" ","Yes","No"};
-		//Using the JComboBox to allow for choices for all my options.
-		JComboBox<String> cb = new JComboBox<String>(Temp);
-		JComboBox<String> cb1 = new JComboBox<String>(choices);
-		JComboBox<String> cb2 = new JComboBox<String>(choices);
-		JComboBox<String> cb3 = new JComboBox<String>(choices);
-		JComboBox<String> cb4 = new JComboBox<String>(choices);
+		//adding the text area
+		cb = new JTextArea(1, 10);
+		cb1 = new JTextArea(1, 10);
+		cb2= new JTextArea(1, 10);
+		cb3 = new JTextArea(1, 10);
+		cb4 = new JTextArea(1, 10);
 		
 		//adding the Jcombobox menu string to the menus
 		menuPanel.add(cb);
@@ -170,36 +180,130 @@ public class medicalGUI extends JFrame implements ActionListener, MouseListener
 		
 	}//end MedicalGUI()
 	
-	public void clearAll(int count)
-	{
-		if(count == 1)
-		{
-			System.out.println("works");
-			cb.setSelectedIndex(0);
-		}
-		
-	}
-	
 	public void actionPerformed(ActionEvent someEvent)
 	{
 		//if user uses the rest button
 		if(someEvent.getSource() == reset) 
 		{
 			JOptionPane.showMessageDialog(this, "The interface has been reset");
-			count = 1;
-			System.out.print(count);
-			
-			clearAll(count);
-				
-			
+			//changing all the texxt to nothing
+			cb.setText("");
+			cb1.setText("");
+			cb2.setText("");
+			cb3.setText("");
+			cb4.setText("");
+
 		}//end if
-		
 		if(someEvent.getSource() == calculate) 
 		{
-			JOptionPane.showMessageDialog(this, "Calculation will display Now");
+			try
+			{
+				check = Integer.parseInt(cb.getText());
+				check1 = Integer.parseInt(cb1.getText());
+				check2 = Integer.parseInt(cb2.getText());
+				check3 = Integer.parseInt(cb3.getText());
+				check3 = Integer.parseInt(cb4.getText());
+			}
+			catch(NumberFormatException nfe) 
+			{
+				JOptionPane.showMessageDialog(this, "One of the answers you entered was not a number");
+			}
+			
+			if(cb.getText().matches("[1-3]"))
+			{
+				if(cb1.getText().matches("[1-2]"))
+				{
+					if(cb2.getText().matches("[1-2]"))
+					{
+						if(cb3.getText().matches("[1-2]"))
+						{
+							if(cb4.getText().matches("[1-2]"))
+							{
+								JOptionPane.showMessageDialog(this, "Calculation will display Now");
+								//1-3 is for temperature readings in native bayes 
+								if(cb.getText().matches("1"))
+								{
+									temp = "hot";
+								}//end if
+								if(cb.getText().matches("2"))
+								{
+									temp = "normal";
+								}//end if
+								if(cb.getText().matches("3"))
+								{
+									temp = "cool";
+								}//end if
+								
+								//1-2 is yes no in the other sections.
+								//Aches 
+								if(cb1.getText().matches("1"))
+								{
+									aches = "yes";
+								}//end if
+								else
+								{
+									aches = "no";
+								}//end if
+								
+								//Cough
+								if(cb2.getText().matches("1"))
+								{
+									cough = "yes";
+								}//end if
+								else
+								{
+									cough = "no";
+								}//end if
+								
+								//Sore Throat
+								if(cb3.getText().matches("1"))
+								{
+									soreThroat = "yes";
+								}//end if
+								else
+								{
+									soreThroat = "no";
+								}//end if
+								
+								//Recently Travel Danger Zone 
+								if(cb4.getText().matches("1"))
+								{
+									RTDZ = "yes";
+								}//end if
+								else
+								{
+									RTDZ = "no";
+								}//end if
+								
+								
+							}//end if cb4
+							else
+							{
+								JOptionPane.showMessageDialog(this, "You entered a wrong number in danger zone");
+							}
+						}//end if cb3
+						else
+						{
+							JOptionPane.showMessageDialog(this, "You entered a wrong number in Sore throat");
+						}
+					}//end if cb2
+					else
+					{
+						JOptionPane.showMessageDialog(this, "You entered a wrong number in cough");
+					}
+				}//end if cb1
+				else
+				{
+					JOptionPane.showMessageDialog(this, "You entered a wrong number in aches");
+				}
+			}//end if cb 
+			else
+			{
+				JOptionPane.showMessageDialog(this, "You entered a wrong number in Temperature");
+			}
 		}//end if 
 	}//end actionPerformed()
-	
+
 	//Override Section
 	@Override
 	public void mouseClicked(MouseEvent anEvent)

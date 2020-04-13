@@ -1,4 +1,4 @@
-package com.assignment.copy;
+package com.assignment;
 
 import com.assignment.medicalGUI;
 import com.assignment.FileProcessing;

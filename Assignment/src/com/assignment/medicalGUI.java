@@ -2,11 +2,9 @@
  * 	Program Description:
  * 	Author : Vlads Drobovics
  * 	Compiler Used: eclipse
- * 	Start Date: 
 */
-package com.assignment.copy;
+package com.assignment;
 //imports from java
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -28,7 +26,7 @@ import java.util.*;
 import java.awt.event.*;
 import java.io.*;
 import com.assignment.nativeBayes;
-import com.assignment.nativeBayesConfig;
+
 
 public class medicalGUI extends JFrame implements ActionListener, MouseListener
 {
@@ -61,8 +59,8 @@ public class medicalGUI extends JFrame implements ActionListener, MouseListener
 		//setting up the buttons
 		reset = new JButton("Reset the results");
 		calculate = new JButton("Calculate chance of Covid-19");
-		//setting up the label
 		
+		//setting up the label
 		titleLabel = new JLabel("Covid-19 Test (This test is to find the percentage chance that the "
 				+ "Person is infect with the Virsu checking their symtoms and their resent travel)");
 		titleLabel.addMouseListener(this);
@@ -275,6 +273,10 @@ public class medicalGUI extends JFrame implements ActionListener, MouseListener
 									RTDZ = "no";
 								}//end if
 								
+								nativeBayes results = new nativeBayes();
+								nativeBayes resultTemp = new nativeBayes();
+								results.nativeBayesConfig(temp,aches,cough,soreThroat,RTDZ);
+								resultTemp.setTemp(temp);
 								
 							}//end if cb4
 							else

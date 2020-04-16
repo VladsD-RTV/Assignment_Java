@@ -1,3 +1,10 @@
+/*	Program Name: Covid-19 database analise using native bayes law
+ * 	Class Description: This class is used to open the file and read the file in the reading part it also does the counting part of the program
+ * 						Which allows for all the values to be displayed to the admin/programmer to see for errors it also allows for the values 
+ * 						to be recived by the nativeBayes calc* methods so that the processing of the probability has all the values needed below.
+ * 	Author : Vlads Drobovics
+ * 	Compiler Used: eclipse
+*/
 package com.assignment;
 
 import java.io.File;
@@ -7,12 +14,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import com.assignment.nativeBayes;
 import com.assignment.medicalGUI;
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
-public class FileProcessing
+public class FileProcessing extends JFrame
 {
 	//gloabal variables
 	String fileName;
 	File actualFile;
+	int CounterBlock;
+	
 	
 	public FileProcessing(String fileName)
 	{
@@ -28,6 +41,7 @@ public class FileProcessing
 	
 	public void readFile()
 	{
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		//token1 string to power the scanner
 		String token1 		= "";
 		//nessacesary variables to count the occurance of each word
@@ -47,6 +61,8 @@ public class FileProcessing
 		int covidcountY		= 0;
 		int covidcountN		= 0;
 		
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		//These values I got from the paper after doing the calculation tables myself
 		//variables needed to count P(x|yes or no)
 		int hotCovidYes		= 0;
 		int hotCovidNo		= 0;
@@ -54,41 +70,50 @@ public class FileProcessing
 		int coolCovidNo		= 0;
 		int normalCovidYes	= 0;
 		int normalCovidNo	= 0;
-		//aches
+		
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		//aches variables
 		int achesYCovidYes	= 0;
 		int achesYCovidNo	= 0;
 		int achesNCovidYes	= 0;
 		int achesNCovidNo	= 0;
-		//cough
+		
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		//cough variables
 		int coughYCovidYes	= 0;
 		int coughYCovidNo	= 0;
 		int coughNCovidYes	= 0;
 		int coughNCovidNo	= 0;
-		//sore throat
+		
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		//sore throat variables
 		int sThroatYCovidYes= 0;
 		int sThroatYCovidNo	= 0;
 		int sThroatNCovidYes= 0;
 		int sThroatNCovidNo	= 0;
 		
-		//recently traveled 
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		//recently traveled variables 
 		int RTDZYCovidYes	= 0;
 		int RTDZYCovidNo	= 0;
 		int RTDZNCovidYes	= 0;
 		int RTDZNCovidNo	= 0;
 		
+		//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		//begin to access the file and start to find the values needed and store them into variables for future use
 		try
 		{
 			//accessing the scanner to create a scan of the file
 			Scanner myScanner = new Scanner(actualFile);
 			
+			//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 			//using a while loop to go through all the variables in the data and to also loop it so that the data is read
 			while(myScanner.hasNext())
 			{
 				token1 = myScanner.next();
 				//printing the token in a single line to show the read
 				System.out.println(token1);
-				//using the split to split the data into columns then reading each value and spliting them at the comma to represent the cloumn
+				//using the split to split the data into columns then reading each value and spliting them at the comma to represent the column
 				String[] tokenSplit = token1.split(",");
 				//using a for loop to go through all six variables in the single line token
 				for(i=0; i<6; i++)
@@ -98,50 +123,48 @@ public class FileProcessing
 					 * This will also allow for the user to add extras 
 					 * Demo here>>
 					*/
-					if(i == 0)//checking numbers for temp
+					if(tokenSplit[i].equals("hot")|tokenSplit[i].equals("Hot"))
 					{
-						if(tokenSplit[i].equals("hot")|tokenSplit[i].equals("Hot"))
-						{
-							hotcount = hotcount + 1;
+						hotcount = hotcount + 1;
 							
-							//getting the P(hot|Yes) or P(hot|No)
-							if(tokenSplit[5].equals("yes")|tokenSplit[5].equals("Yes"))
-							{
+						//getting the P(hot|Yes) or P(hot|No)
+						if(tokenSplit[5].equals("yes")|tokenSplit[5].equals("Yes"))
+						{
 								hotCovidYes = hotCovidYes + 1;
-							}//end if 
-							else
-							{
-								hotCovidNo = hotCovidNo + 1;
-							}//end else
-						}//end if
-						if(tokenSplit[i].equals("cool")|tokenSplit[i].equals("cold"))
+						}//end if 
+						else
 						{
-							coolcount = coolcount + 1;
+							hotCovidNo = hotCovidNo + 1;
+						}//end else
+					}//end if
+					if(tokenSplit[i].equals("cool")|tokenSplit[i].equals("cold"))
+					{
+						coolcount = coolcount + 1;
 							
-							//getting the P(cool|Yes) or P(cool|No)
-							if(tokenSplit[5].equals("yes")|tokenSplit[5].equals("Yes"))
-							{
-								coolCovidYes = coolCovidYes + 1;
-							}//end if 
-							else
-							{
-								coolCovidNo = coolCovidNo + 1;
-							}//end else
-						}//end if
-						if(tokenSplit[i].equals("normal"))
+						//getting the P(cool|Yes) or P(cool|No)
+						if(tokenSplit[5].equals("yes")|tokenSplit[5].equals("Yes"))
 						{
-							normalcount = normalcount + 1;
+							coolCovidYes = coolCovidYes + 1;
+						}//end if 
+						else
+						{
+							coolCovidNo = coolCovidNo + 1;
+						}//end else
+					}//end if
+					if(tokenSplit[i].equals("normal"))
+					{
+						normalcount = normalcount + 1;
 							
-							//getting the P(normal|Yes) or P(normal|No)
-							if(tokenSplit[5].equals("yes")|tokenSplit[5].equals("Yes"))
-							{
-								normalCovidYes = normalCovidYes + 1;
-							}//end if 
-							else
-							{
-								normalCovidNo = normalCovidNo + 1;
-							}//end else
-						}//end if
+						//getting the P(normal|Yes) or P(normal|No)
+						if(tokenSplit[5].equals("yes")|tokenSplit[5].equals("Yes"))
+						{
+							normalCovidYes = normalCovidYes + 1;
+						}//end if 
+						else
+						{
+							normalCovidNo = normalCovidNo + 1;
+						}//end else
+					
 					}//end if for temp
 					
 					if(i==1)//checking for number of aches
@@ -297,13 +320,16 @@ public class FileProcessing
 					}//end if for covid-19
 				}//end for
 				count = count + 1;
-				
-			}//end while
-		
-			count = count-1;//-1 as there are 1 extra line that we don't use
-			int processedcount = count;//used to represent the finished count
+			}//end while loop
 			
-			//Output to the admin to show that all counts show correct amounts
+			//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+			//-1 as there are 1 extra line that we don't use
+			count = count-1;
+			//used to represent the finished count
+			int processedcount = count;
+			
+			//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+			//Output to the admin to show that all counts show correct amounts so that admin can see all the values he or she needs
 			System.out.print(processedcount);
 			System.out.println("\n");
 			//hot temp
@@ -339,7 +365,8 @@ public class FileProcessing
 			System.out.println("The count of people with covid-19 ="+covidcountY);
 			System.out.println("The count of people with no covid-19 ="+covidcountN);
 			
-		
+			//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+			//setting up objects to send to the nativeBayes class
 			nativeBayes dataTempCountResults = new nativeBayes();
 			nativeBayes dataAchesCountResults = new nativeBayes();
 			nativeBayes dataCoughCountResults = new nativeBayes();
@@ -347,17 +374,21 @@ public class FileProcessing
 			nativeBayes dataRTDZCountResults = new nativeBayes();
 			nativeBayes dataProcessResults = new nativeBayes();
 			
+			//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+			//sending all the values to the methods needed to calculate the probability in the nativeBayes class.
 			dataTempCountResults.nativeBayesCalcTemp(hotCovidYes,hotCovidNo,coolCovidYes,coolCovidNo,normalCovidYes,normalCovidNo,covidcountY,covidcountN);
 			dataAchesCountResults.nativeBayesCalcAches(achesYCovidYes,achesYCovidNo,achesNCovidYes,achesNCovidNo,covidcountY,covidcountN);
 			dataCoughCountResults.nativeBayesCalcCough(coughYCovidYes,coughYCovidNo,coughNCovidYes,coughNCovidNo,covidcountY,covidcountN);
 			dataSoreThroatCountResults.nativeBayesCalcSThroat(sThroatYCovidYes, sThroatYCovidNo, sThroatNCovidYes, sThroatNCovidNo, covidcountY, covidcountN);
 			dataRTDZCountResults.nativeBayesCalcRTDZ(RTDZYCovidYes, RTDZYCovidNo, RTDZNCovidYes, RTDZNCovidNo, covidcountY, covidcountN);
 			dataProcessResults.nativeBayesCalcProcess(processedcount, covidcountY, covidcountN);
+			
+			//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+			
 			//count reset if user runs program again
 			count = 0;
 			//closing the scanner 
 			myScanner.close();
-			
 			
 		}//end try
 		catch(FileNotFoundException e)
